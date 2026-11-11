@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beau Rowland</title>
+<!-- Fallback font (free, similar wide shape) used if Brice isn't available -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<style>
+  /* Brice SemiExpanded: used if installed on the computer, or if the font
+     files are placed in a "fonts" folder next to this page */
+  @font-face {
+    font-family: "Brice";
+    src: local("Brice SemiExpanded"), local("Brice-SemiExpanded"),
+         url("fonts/Brice-SemiExpanded.woff2") format("woff2");
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: "Brice";
+    src: local("Brice SemiExpanded Bold"), local("Brice-SemiExpandedBold"),
+         url("fonts/Brice-SemiExpandedBold.woff2") format("woff2");
+    font-weight: 700;
+  }
+
+  :root {
+    --ink: #000;
+    --soft: #5a5a5a;
+    --line: #000;
+    --ease: cubic-bezier(.2, .7, .2, 1);
+  }
+  * { box-sizing: border-box; }
+  html { background: #fff; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: #fff;
+    color: var(--ink);
+    font-family: "Brice", "Archivo", Verdana, sans-serif;
+    font-stretch: 112.5%;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 64px 16px 80px;
+    animation: in .7s var(--ease) both;
+  }
+  @keyframes in { from { opacity: 0; } }
+
+  /* header */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 72px;
+  }
+  h1 {
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.5px;
+    margin: 0 0 14px;
+  }
+  .contact { font-size: 13px; }
+  .contact a + a { margin-left: 18px; }
+
+  /* dropdown menu */
+  .menu { position: relative; padding-top: 6px; }
+  .menu-btn {
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  .menu-btn i {
+    display: inline-block;
+    font-style: normal;
+    margin-left: 6px;
+    transition: transform .3s var(--ease);
+  }
+  .menu.open .menu-btn i { transform: rotate(45deg); }
+  .menu-list {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 10px);
+    min-width: 170px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid var(--ink);
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition: opacity .18s, transform .25s var(--ease);
+    z-index: 10;
+  }
+  .menu.open .menu-list { opacity: 1; transform: none; pointer-events: auto; }
+  .menu-list li + li { border-top: 1px solid var(--ink); }
+  .menu-list a {
+    display: block;
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+  .menu-list a:hover { background: var(--ink); color: #fff; text-decoration: none; }
+
+  /* fixed sections */
+  section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  h2 {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .row .t { font-weight: 700; }
+  .row p { margin: 2px 0 0; color: var(--soft); font-size: 13px; }
+  .row .yr { font-size: 13px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  /* collapsible sections */
+  .fold { scroll-margin-top: 24px; }
+  .fold + .fold { margin-top: 0; }
+  .fold-head {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--ink);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    cursor: pointer;
+    text-align: left;
+  }
+  .fold:first-of-type .fold-head { border-top: 2px solid var(--ink); }
+  .fold-head .pm { position: relative; width: 11px; height: 11px; }
+  .fold-head .pm::before, .fold-head .pm::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 5px;
+    width: 11px; height: 1.5px;
+    background: var(--ink);
+    transition: transform .35s var(--ease);
+  }
+  .fold-head .pm::after { transform: rotate(90deg); }
+  .fold.open .pm::after { transform: rotate(0); }
+
+  .fold-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .45s var(--ease);
+  }
+  .fold.open .fold-body { grid-template-rows: 1fr; }
+  .fold-inner { overflow: hidden; opacity: 0; transition: opacity .3s; }
+  .fold.open .fold-inner { opacity: 1; transition-delay: .1s; }
+  .fold-content { padding: 4px 0 20px; }
+  .fold-content > p { margin: 10px 0; }
+
+  footer { margin-top: 72px; font-size: 12px; }
+
+  @media (max-width: 480px) {
+    .wrap { padding-top: 40px; }
+    h1 { font-size: 32px; }
+    header { margin-bottom: 52px; }
+    .contact a + a { margin-left: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <h1>Beau Rowland</h1>
+      <div class="contact" id="contact"></div>
+    </div>
+    <nav class="menu" id="menu">
+      <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-haspopup="true">Menu<i>+</i></button>
+      <ul class="menu-list">
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#published">Published</a></li>
+        <li><a href="#achievements">Achievements</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <div id="projects-list"></div>
+  </section>
+
+  <section id="experience">
+    <h2>Experience</h2>
+    <div id="experience-list"></div>
+  </section>
+
+  <div class="fold" id="about">
+    <button class="fold-head">About<span class="pm"></span></button>
+    <div class="fold-body"><div class="fold-inner"><div class="fold-content">
+      <p>Second-year engineering student at Trinity College Dublin.</p>
+    </div></div></div>
+  </div>
+
+  <div class="fold" id="published">
+    <button class="fold-head">Published<span class="pm"></span></button>
+    <div class="fold-body"><div class="fold-inner"><div class="fold-content" id="published-list"></div></div></div>
+  </div>
+
+  <div class="fold" id="achievements">
+    <button class="fold-head">Achievements<span class="pm"></span></button>
+    <div class="fold-body"><div class="fold-inner"><div class="fold-content" id="achievements-list"></div></div></div>
+  </div>
+
+  <footer>&copy; <span id="year"></span> Beau Rowland</footer>
+</div>
+
+<script>
+/* ============================================================
+   EDIT YOUR CONTENT HERE
+   ============================================================ */
+
+const contact = [
+  { label: "Email",    link: "mailto:beaurowland275@gmail.com" },
+  { label: "Phone",    link: "tel:+32492411630" },
+  { label: "LinkedIn", link: "https://www.linkedin.com/in/beau-rowland-365227389" }
+];
+
+const projects = [
+  { title: "RMA RC Car", year: "", desc: "" }
+];
+
+const experience = [
+  { title: "Service Technician, European School of Brussels II", year: "May 2026 – Sep 2026", desc: "Contract · Brussels" },
+  { title: "Brand Ambassador, CELSIUS",                    year: "Oct 2025 – Present",  desc: "Freelance · Dublin, remote" },
+  { title: "Junior Analyst, Trinity Student Managed Fund", year: "Sep 2025 – May 2026", desc: "Part-time · Dublin" },
+  { title: "Student Intern, European Committee of the Regions", year: "Jun 2023",       desc: "Internship · Brussels" }
+];
+
+const published = [
+  { title: "Complacency: the state of revolution today", year: "", desc: "TEDx talk · TEDxEEBIV Youth, with Olaf Golsztajn", link: "https://www.youtube.com/watch?v=vWE56iNSqDo" }
+  // Article — add it here once you have the details:
+  // , { title: "Article title", year: "2026", desc: "Article · Publication name", link: "https://..." }
+];
+
+const achievements = [
+  { title: "Dublin Marathon, sub-4 hours", year: "2026",        desc: "Raised over €3,500 for Pieta House" },
+  { title: "Belgian International (Junior)", year: "2022 – 2025", desc: "Rugby · Touch Rugby · GAA" }
+];
+
+/* ============================================================
+   RENDERING (no need to edit below)
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+
+const rows = items => items.map(i => `
+  <div class="row">
+    <div>
+      <div class="t">${i.link ? `<a href="${esc(i.link)}">${esc(i.title)} &#8599;</a>` : esc(i.title)}</div>
+      ${i.desc ? `<p>${esc(i.desc)}</p>` : ""}
+    </div>
+    <div class="yr">${esc(i.year)}</div>
+  </div>`).join("");
+
+$("contact").innerHTML = contact.map(c => `<a href="${esc(c.link)}">${esc(c.label)}</a>`).join("");
+$("projects-list").innerHTML = rows(projects);
+$("experience-list").innerHTML = rows(experience);
+$("published-list").innerHTML = rows(published);
+$("achievements-list").innerHTML = rows(achievements);
+$("year").textContent = new Date().getFullYear();
+
+// open / close sections
+document.querySelectorAll(".fold-head").forEach(btn => {
+  btn.setAttribute("aria-expanded", "false");
+  btn.addEventListener("click", () => {
+    const open = btn.parentElement.classList.toggle("open");
+    btn.setAttribute("aria-expanded", open);
+  });
+});
+
+// dropdown menu
+const menu = $("menu"), menuBtn = $("menu-btn");
+const setMenu = open => { menu.classList.toggle("open", open); menuBtn.setAttribute("aria-expanded", open); };
+menuBtn.addEventListener("click", e => { e.stopPropagation(); setMenu(!menu.classList.contains("open")); });
+document.addEventListener("click", () => setMenu(false));
+document.addEventListener("keydown", e => { if (e.key === "Escape") setMenu(false); });
+
+// menu links open the matching section if it's collapsible
+menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
+  const target = document.querySelector(a.getAttribute("href"));
+  if (target && target.classList.contains("fold") && !target.classList.contains("open")) {
+    target.querySelector(".fold-head").click();
+  }
+}));
+</script>
+</body>
+</html>
